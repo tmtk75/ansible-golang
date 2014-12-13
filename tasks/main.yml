@@ -1,0 +1,6 @@
+---
+# tasks file for golang
+  - get_url: url=https://storage.googleapis.com/golang/go{{ version }}.linux-amd64.tar.gz dest=/usr/local
+  - unarchive: src=/usr/local/go{{ version }}.linux-amd64.tar.gz dest=/usr/local/ copy=no
+  - lineinfile: dest=/home/{{ user }}/.bashrc line="export PATH=$PATH:/usr/local/go/bin"
+  - lineinfile: dest=/home/{{ user }}/.bashrc line="export GOPATH=$HOME/.go"
