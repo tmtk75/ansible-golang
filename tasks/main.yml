@@ -1,6 +1,23 @@
 ---
 # tasks file for golang
-  - get_url: url=https://storage.googleapis.com/golang/go{{ version }}.linux-amd64.tar.gz dest=/usr/local
-  - unarchive: src=/usr/local/go{{ version }}.linux-amd64.tar.gz dest=/usr/local/ copy=no
-  - lineinfile: dest=/home/{{ user }}/.bashrc line="export PATH=$PATH:/usr/local/go/bin"
-  - lineinfile: dest=/home/{{ user }}/.bashrc line="export GOPATH=$HOME/.go"
+- get_url: url={{ golang_src }} sha256sum={{ golang_sha256sum[golang_version] }} dest={{ golang_tmptar }} force=true
+  tags:
+    - golang
+    - golang.download
+
+- unarchive: src={{ golang_tmptar }} dest=/usr/local/ copy=no
+  tags:
+    - golang
+    - golang.unarchive
+
+- lineinfile: dest=/home/{{ golang_user }}/.bashrc line="export PATH=/usr/local/go/bin:$PATH"
+  tags:
+    - golang
+    - golang.user
+    - golang.user.path
+
+- lineinfile: dest=/home/{{ golang_user }}/.bashrc line="export GOPATH=$HOME/.go"
+  tags:
+    - golang
+    - golang.user
+    - golang.user.gopath
